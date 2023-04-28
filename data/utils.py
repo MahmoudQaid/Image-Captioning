@@ -6,6 +6,43 @@ import torch
 import torch.distributed as dist
 
 import utils
+from collections import defaultdict
+import json,string,re
+
+
+def load_doc_karpathy(json_file_path,pattern=None,lower=False):
+    # this function return dictionary 
+    with open(json_file_path,'r') as file:
+        data=json.loads(file.read())
+    dict_data=defaultdict(list)
+    for example in data['images']:
+        temp=[]
+        
+        for sentence in example['sentences']:
+            cap=sentence['raw']
+            if lower:
+                cap=cap.lower()
+                
+            cap=cap.translate(str.maketrans('','',string.punctuation))
+            
+            if pattern is not None:
+                cap=re.sub(pattern,'',cap)
+            cap=' '.join(cap.split())
+            if example['split']=='train':
+                dict_data[example['split']].append({'caption':cap,
+                                                    'image': example['filename'],
+                                                    'image_id': example['imgid']})
+            else:
+                temp.append(cap)
+                
+        if example['split']!='train':
+            dict_data[example['split']].append({'caption':temp,
+                                                'image': example['filename']
+                                             })
+            
+# {'train':[{'image':'name.jpg','image_id':img_id,'caption':cap}],'test':[{'image':'name.jpg','captions':[cap1,...,cap5]}],'val':[{'image':'name.jpg','captions':[cap1,...,cap5]}]}  
+    return dict_data
+
 
 def pre_caption(caption,max_words=50):
     caption = re.sub(
@@ -28,22 +65,27 @@ def pre_caption(caption,max_words=50):
             
     return caption
 
-def pre_question(question,max_ques_words=50):
-    question = re.sub(
-        r"([.!\"()*#:;~])",
-        '',
-        question.lower(),
-    ) 
-    question = question.rstrip(' ')
+def prepare_ref_caps_for_evaluate(list_dict,output_json_path=''):
+    '''
+    list_dict: [{'image':name.jpg,'caption':['cap1','cap2',...]},...]
+    returns {'annotations':[{'image_id':name.jpg,'caption':cap,'id':j},...],
+                'images':[{'id':name.jpg},...]}
+    '''
     
-    #truncate question
-    question_words = question.split(' ')
-    if len(question_words)>max_ques_words:
-        question = ' '.join(question_words[:max_ques_words])
-            
-    return question
-
-
+    references={'annotations':[],
+                'images':[]}
+    j=0
+    for i,d in enumerate(list_dict):
+        for cap in d['caption']:
+            references['annotations'].append({'image_id':d['image'],'caption':cap,'id':j})
+            j+=1
+        references['images'].append({'id':d['image']})
+    if output_json_path:
+        json.dump(references,open(output_json_path,'w'))
+    
+    return references
+    
+    
 def save_result(result, result_dir, filename, remove_duplicate=''):
     result_file = os.path.join(result_dir, '%s_rank%d.json'%(filename,utils.get_rank()))
     final_result_file = os.path.join(result_dir, '%s.json'%filename)
