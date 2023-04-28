@@ -3,7 +3,7 @@ from torch.utils.data import DataLoader
 from torchvision import transforms
 from torchvision.transforms.functional import InterpolationMode
 
-from data.coco_karpathy_dataset import coco_karpathy_train, coco_karpathy_caption_eval, coco_karpathy_retrieval_eval
+from data.coco_karpathy_dataset import coco_karpathy_train, coco_karpathy_caption_eval
 from data.nocaps_dataset import nocaps_eval
 #from data.flickr30k_dataset import flickr30k_train, flickr30k_retrieval_eval
 #from data.vqa_dataset import vqa_dataset
@@ -43,18 +43,6 @@ def create_dataset(dataset, config, min_scale=0.5,annot_dict={'train':None,'val'
         val_dataset = nocaps_eval(transform_test, config['image_root'], config['ann_root'], 'val')
         test_dataset = nocaps_eval(transform_test, config['image_root'], config['ann_root'], 'test')   
         return val_dataset, test_dataset   
-    
-    elif dataset=='retrieval_coco':          
-        train_dataset = coco_karpathy_train(transform_train, config['image_root'], config['ann_root'],annot_list=annot_dict['train'])
-        val_dataset = coco_karpathy_retrieval_eval(transform_test, config['image_root'], config['ann_root'], 'val',annot_list=annot_dict['val']) 
-        test_dataset = coco_karpathy_retrieval_eval(transform_test, config['image_root'], config['ann_root'], 'test',annot_list=annot_dict['test'])          
-        return train_dataset, val_dataset, test_dataset    
-    
-    elif dataset=='retrieval_flickr':          
-        train_dataset = flickr30k_train(transform_train, config['image_root'], config['ann_root'])
-        val_dataset = flickr30k_retrieval_eval(transform_test, config['image_root'], config['ann_root'], 'val') 
-        test_dataset = flickr30k_retrieval_eval(transform_test, config['image_root'], config['ann_root'], 'test')          
-        return train_dataset, val_dataset, test_dataset     
     
     elif dataset=='vqa': 
         train_dataset = vqa_dataset(transform_train, config['ann_root'], config['vqa_root'], config['vg_root'], 
