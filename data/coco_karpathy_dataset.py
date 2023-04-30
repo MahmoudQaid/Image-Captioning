@@ -90,7 +90,7 @@ class coco_karpathy_caption_eval(Dataset):
         image = self.transform(image)          
         
         img_id = ann['image'].split('/')[-1].strip('.jpg').split('_')[-1]
-        if self.is_coco:
-            return image, int(img_id) 
+        # if self.is_coco:
+        #     return image, int(img_id) 
         return image, ann['image']   
     
