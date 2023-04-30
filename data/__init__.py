@@ -12,7 +12,7 @@ from data.pretrain_dataset import pretrain_dataset
 from transform.randaugment import RandomAugment
 
 def create_dataset(dataset, config, min_scale=0.5,annot_dict={'train':None,'val':None,'test':None}):
-    
+
     normalize = transforms.Normalize((0.48145466, 0.4578275, 0.40821073), (0.26862954, 0.26130258, 0.27577711))
 
     transform_train = transforms.Compose([                        

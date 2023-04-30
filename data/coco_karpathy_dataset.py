@@ -18,7 +18,7 @@ class coco_karpathy_train(Dataset):
         filename = 'coco_karpathy_train.json'
         self.is_coco=False
         if annot_list is None:
-            download_url(url,ann_root)
+            # download_url(url,ann_root)
             self.annotation = json.load(open(os.path.join(ann_root,filename),'r'))
             self.is_coco=True
         else:
@@ -45,7 +45,7 @@ class coco_karpathy_train(Dataset):
         
         image_path = os.path.join(self.image_root,ann['image'])
         if self.is_coco:
-            image_path = os.path.join(self.image_root,ann['image'].split('/')[0],ann['image'])        
+            image_path = os.path.join(self.image_root,ann['image'])        
 
         image = Image.open(image_path).convert('RGB')   
         image = self.transform(image)
@@ -67,7 +67,7 @@ class coco_karpathy_caption_eval(Dataset):
         filenames = {'val':'coco_karpathy_val.json','test':'coco_karpathy_test.json'}
         self.is_coco=False
         if annot_list is None:
-            download_url(urls[split],ann_root)
+            # download_url(urls[split],ann_root)
             self.annotation = json.load(open(os.path.join(ann_root,filenames[split]),'r'))
             self.is_coco=True
         else:
@@ -85,7 +85,7 @@ class coco_karpathy_caption_eval(Dataset):
         
         image_path = os.path.join(self.image_root,ann['image'])
         if self.is_coco:
-            image_path = os.path.join(self.image_root,ann['image'].split('/')[0],ann['image'])        
+            image_path = os.path.join(self.image_root,ann['image'])        
         image = Image.open(image_path).convert('RGB') 
         image = self.transform(image)          
         

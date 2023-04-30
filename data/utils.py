@@ -10,7 +10,7 @@ from collections import defaultdict
 import json,string,re
 
 
-def load_doc_karpathy(json_file_path,pattern=None,lower=False):
+def load_doc_karpathy(json_file_path,pattern=None,lower=False,is_coco=False):
     # this function return dictionary 
     with open(json_file_path,'r') as file:
         data=json.loads(file.read())
@@ -18,6 +18,9 @@ def load_doc_karpathy(json_file_path,pattern=None,lower=False):
     for example in data['images']:
         temp=[]
         
+        if is_coco:
+            example['filename']=example['filepath']+'/'+example['filepath']+'/'+example['filename']
+
         for sentence in example['sentences']:
             cap=sentence['raw']
             if lower:
@@ -28,6 +31,7 @@ def load_doc_karpathy(json_file_path,pattern=None,lower=False):
             if pattern is not None:
                 cap=re.sub(pattern,'',cap)
             cap=' '.join(cap.split())
+
             if example['split']=='train':
                 dict_data[example['split']].append({'caption':cap,
                                                     'image': example['filename'],
@@ -42,6 +46,7 @@ def load_doc_karpathy(json_file_path,pattern=None,lower=False):
             
 # {'train':[{'image':'name.jpg','image_id':img_id,'caption':cap}],'test':[{'image':'name.jpg','captions':[cap1,...,cap5]}],'val':[{'image':'name.jpg','captions':[cap1,...,cap5]}]}  
     return dict_data
+
 
 
 def pre_caption(caption,max_words=50):
