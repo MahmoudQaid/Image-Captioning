@@ -16,11 +16,9 @@ class coco_karpathy_train(Dataset):
         '''        
         url = 'https://storage.googleapis.com/sfr-vision-language-research/datasets/coco_karpathy_train.json'
         filename = 'coco_karpathy_train.json'
-        self.is_coco=False
         if annot_list is None:
             # download_url(url,ann_root)
             self.annotation = json.load(open(os.path.join(ann_root,filename),'r'))
-            self.is_coco=True
         else:
             self.annotation=annot_list
         self.transform = transform
@@ -44,8 +42,8 @@ class coco_karpathy_train(Dataset):
         ann = self.annotation[index]
         
         image_path = os.path.join(self.image_root,ann['image'])
-        if self.is_coco:
-            image_path = os.path.join(self.image_root,ann['image'])        
+        # if self.is_coco:
+        #     image_path = os.path.join(self.image_root,ann['image'])        
 
         image = Image.open(image_path).convert('RGB')   
         image = self.transform(image)
@@ -65,11 +63,9 @@ class coco_karpathy_caption_eval(Dataset):
         urls = {'val':'https://storage.googleapis.com/sfr-vision-language-research/datasets/coco_karpathy_val.json',
                 'test':'https://storage.googleapis.com/sfr-vision-language-research/datasets/coco_karpathy_test.json'}
         filenames = {'val':'coco_karpathy_val.json','test':'coco_karpathy_test.json'}
-        self.is_coco=False
         if annot_list is None:
             # download_url(urls[split],ann_root)
             self.annotation = json.load(open(os.path.join(ann_root,filenames[split]),'r'))
-            self.is_coco=True
         else:
             self.annotation=annot_list
         
@@ -84,12 +80,11 @@ class coco_karpathy_caption_eval(Dataset):
         ann = self.annotation[index]
         
         image_path = os.path.join(self.image_root,ann['image'])
-        if self.is_coco:
-            image_path = os.path.join(self.image_root,ann['image'])        
+     
         image = Image.open(image_path).convert('RGB') 
         image = self.transform(image)          
         
-        img_id = ann['image'].split('/')[-1].strip('.jpg').split('_')[-1]
+        # img_id = ann['image'].split('/')[-1].strip('.jpg').split('_')[-1]
         # if self.is_coco:
         #     return image, int(img_id) 
         return image, ann['image']   
