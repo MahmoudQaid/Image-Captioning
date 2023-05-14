@@ -70,7 +70,7 @@ def create_loader(datasets, samplers, batch_size, num_workers, is_trains, collat
     for dataset,sampler,bs,n_worker,is_train,collate_fn in zip(datasets,samplers,batch_size,num_workers,is_trains,collate_fns):
         if is_train:
             # shuffle = (sampler is None)
-            suffle=True
+            shuffle=True
             drop_last = True
         else:
             shuffle = False
