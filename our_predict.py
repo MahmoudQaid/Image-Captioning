@@ -26,12 +26,12 @@ happy_tt = HappyTextToText("T5", config['checkpoint']+'corrector_ckpt')
 
 args = TTSettings(num_beams=5, min_length=1)
 
-def predict(img_path,num_beams=config['num_beams']):
+def predict(img_path,num_beams=config['num_beams'],sample=False):
     image = Image.open(img_path).convert('RGB') 
-    image = transform(image)
+    image = transform(image).to(device)
     image=image.unsqueeze(dim=0)
     captioner.eval()
-    visual_caption=captioner.generate(image, sample=False, num_beams=num_beams, max_length=config['max_length'], 
+    visual_caption=captioner.generate(image, sample=sample, num_beams=num_beams, max_length=config['max_length'], 
                               min_length=config['min_length'])[0]
     result = happy_tt.generate_text("grammar: "+visual_caption, args=args)
     return result.text
