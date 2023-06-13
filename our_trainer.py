@@ -33,6 +33,7 @@ from data import create_dataset, create_sampler, create_loader
 from data.utils import save_result, coco_caption_eval
 from our_models import TrainingModel
 
+from prepare_data import prepare_training_data
 
 import torch 
 from torchvision.datasets.utils import download_url
@@ -45,7 +46,8 @@ args = json.load(open('args.json','r'))
 config=json.load(open('config.json','r'))
 args = Args(args) # dict2object
 
-    
+prepare_training_data(config['karpathy_annot_path'],config['ann_root'])
+
 from pytorch_lightning.callbacks import ModelCheckpoint
 
 print("Creating captioning dataset")
