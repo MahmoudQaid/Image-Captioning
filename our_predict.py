@@ -2,6 +2,7 @@ from models.blip import blip_decoder
 from PIL import Image
 import json
 from torchvision import transforms
+import torch
 # from our_models import TrainingModel
 
 normalize = transforms.Normalize((0.48145466, 0.4578275, 0.40821073), (0.26862954, 0.26130258, 0.27577711))
@@ -14,6 +15,8 @@ transform = transforms.Compose([
 
 config=json.load(open('config.json','r'))
 captioner=blip_decoder(pretrained=config['checkpoint']+'captioner_ckpt/captioner.pth', image_size=384, vit='base')
+device = torch.device(('cuda' if torch.cuda.is_available() else 'cpu'))
+captioner=captioner.to(device)
 captioner.eval()
 
 # !pip install happytransformer
