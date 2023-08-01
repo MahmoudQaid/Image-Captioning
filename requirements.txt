@@ -1,4 +1,9 @@
 timm==0.4.12
 transformers==4.15.0
+happytransformer
 fairscale==0.4.4
+pycocotools
 pycocoevalcap
+"pytorch-lightning"
+"lightning"
+ruamel.yaml
