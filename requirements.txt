@@ -4,6 +4,6 @@ happytransformer
 fairscale==0.4.4
 pycocotools
 pycocoevalcap
-"pytorch-lightning"
-"lightning"
+pytorch-lightning
+lightning
 ruamel.yaml
