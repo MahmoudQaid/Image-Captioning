@@ -15,7 +15,7 @@ You Can run main.ipynb file by installing requirements.txt
 To inference our model, you will need to download our checkpoint from [model checkpoint](https://www.kaggle.com/datasets/uwelcomem/image-captioing-checkpoint) and place it to the folder which you choose it on config.json file in "checkpoint" field and set "load_checkpoint" to true.
 
 To eval our model you will need to download the following:
-- [Coco 2014 Dataset](https://www.kaggle.com/datasets/nadaibrahim/coco2014) and place it to the folder choosen in config.json in "image_root" field.
+- [Coco 2014 Dataset ](https://www.kaggle.com/datasets/nadaibrahim/coco2014) (20 GB) and place it to the folder choosen in config.json in "image_root" field.
 - [Karpathy Split Dataset](https://www.kaggle.com/datasets/shtvkumar/karpathy-splits) and place it to the folder choosen in config "karpathy_annot_path" field.
 
   Then you will need to set "evaluate" in args.json to true. After that you can run the evaluation part by run our_trainer.py file.
