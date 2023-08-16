@@ -1,4 +1,4 @@
-from models.blip import blip_decoder
+from models.decoder import get_decoder
 from PIL import Image
 import json
 from torchvision import transforms
@@ -14,7 +14,7 @@ transform = transforms.Compose([
 ])     
 
 config=json.load(open('config.json','r'))
-captioner=blip_decoder(pretrained=config['checkpoint']+'captioner_ckpt/captioner.pth', image_size=384, vit='base')
+captioner=get_decoder(pretrained=config['checkpoint']+'captioner_ckpt/captioner.pth', image_size=384, vit='base')
 device = torch.device(('cuda' if torch.cuda.is_available() else 'cpu'))
 captioner=captioner.to(device)
 captioner.eval()

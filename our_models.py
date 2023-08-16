@@ -5,7 +5,7 @@ import json
 
 import torch 
 from torchvision.datasets.utils import download_url
-from models.blip import blip_decoder
+from models.decoder import get_decoder
 from models.vit import interpolate_pos_embed
 from data.utils import save_result, coco_caption_eval
 
@@ -22,7 +22,7 @@ def init_model_vit_and_embedding(model=None):
         elif  i[:len('text_encoder.embeddings.')]=='text_encoder.embeddings.':
             embeddings_dict[i[len('text_encoder.embeddings.'):]]=chpt['model'][i]
 
-    model = blip_decoder(pretrained='', image_size=384, vit='base')
+    model = get_decoder(pretrained='', image_size=384, vit='base')
         
     visual_encoder_dict['pos_embed'] = interpolate_pos_embed(visual_encoder_dict['pos_embed'],model.visual_encoder) 
 
@@ -39,7 +39,7 @@ class TrainingModel(pl.LightningModule):
         if config==None:
             config=json.load(open('config.json','r'))
         if config['load_checkpoint'] and config['checkpoint']:
-            self.model = blip_decoder(pretrained=config['checkpoint']+'captioner_ckpt/captioner.pth', image_size=384, vit='base')
+            self.model = get_decoder(pretrained=config['checkpoint']+'captioner_ckpt/captioner.pth', image_size=384, vit='base')
         else:
             self.model = init_model_vit_and_embedding()
             

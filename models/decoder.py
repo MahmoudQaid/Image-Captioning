@@ -1,10 +1,3 @@
-'''
- * Copyright (c) 2022, salesforce.com, inc.
- * All rights reserved.
- * SPDX-License-Identifier: BSD-3-Clause
- * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
- * By Junnan Li
-'''
 import warnings
 warnings.filterwarnings("ignore")
 
@@ -75,7 +68,7 @@ class BLIP_Base(nn.Module):
         
         
         
-class BLIP_Decoder(nn.Module):
+class Decoder(nn.Module):
     def __init__(self,                 
                  med_config = 'configs/med_config.json',  
                  image_size = 384,
@@ -169,8 +162,8 @@ class BLIP_Decoder(nn.Module):
         return captions
     
 
-def blip_decoder(pretrained='',**kwargs):
-    model = BLIP_Decoder(**kwargs)
+def get_decoder(pretrained='',**kwargs):
+    model = Decoder(**kwargs)
     if pretrained:
         model,msg = load_checkpoint(model,pretrained)
         assert(len(msg.missing_keys)==0)
